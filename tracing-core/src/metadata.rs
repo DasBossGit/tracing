@@ -54,6 +54,7 @@ use core::{
 /// [module path]: Self::module_path
 /// [collector]: super::collect::Collect
 /// [callsite identifiers]: Self::callsite
+#[derive(Clone)]
 pub struct Metadata<'a> {
     /// The name of the span described by this metadata.
     name: &'static str,
