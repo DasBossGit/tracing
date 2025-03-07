@@ -155,6 +155,7 @@ pub struct Empty;
 ///
 /// [initialized]: Self::new
 /// [callsite identifiers]: callsite::Identifier
+#[derive(Clone)]
 pub struct FieldSet {
     /// The names of each field on the described span.
     names: &'static [&'static str],

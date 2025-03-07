@@ -54,6 +54,7 @@ use crate::stdlib::{
 /// [module path]: Self::module_path
 /// [`Subscriber`]: super::subscriber::Subscriber
 /// [callsite identifiers]: Self::callsite
+#[derive(Clone)]
 pub struct Metadata<'a> {
     /// The name of the span described by this metadata.
     name: &'static str,
