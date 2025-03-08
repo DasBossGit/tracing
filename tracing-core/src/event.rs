@@ -36,6 +36,14 @@ impl<'a> Event<'a> {
         });
     }
 
+    pub fn leak(&self) -> Event<'static> {
+        Event {
+            fields: self.fields,
+            metadata: self.metadata,
+            parent: self.parent.clone(),
+        }
+    }
+
     /// Returns a new `Event` in the current span, with the specified metadata
     /// and set of values.
     #[inline]

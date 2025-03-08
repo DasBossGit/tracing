@@ -164,6 +164,7 @@ pub struct FieldSet {
 }
 
 /// A set of fields and values for a span.
+#[derive(Clone)]
 pub struct ValueSet<'a> {
     values: &'a [(&'a Field, Option<&'a (dyn Value + 'a)>)],
     fields: &'a FieldSet,
