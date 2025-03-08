@@ -81,6 +81,9 @@ impl<S> Layer<S> {
     pub fn new() -> Self {
         Self::default()
     }
+    pub fn inner(&self) -> PhantomData<fn(S)> {
+        self._inner
+    }
 }
 
 // This needs to be a seperate impl block because they place different bounds on the type parameters.
@@ -1621,8 +1624,7 @@ mod test {
             .with_timer(MockTime)
             .with_span_events(FmtSpan::ACTIVE);
 
-        let (reloadable_layer, reload_handle) =
-            crate::reload::Layer::new(inner_layer);
+        let (reloadable_layer, reload_handle) = crate::reload::Layer::new(inner_layer);
         let reload = reloadable_layer.with_subscriber(Registry::default());
 
         with_default(reload, || {
