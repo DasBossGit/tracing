@@ -88,7 +88,7 @@ use tracing_core::{
 /// [stored span data]: crate::registry::SpanData::extensions_mut
 #[cfg(feature = "registry")]
 #[cfg_attr(docsrs, doc(cfg(all(feature = "registry", feature = "std"))))]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Registry {
     spans: Pool<DataInner>,
     current_spans: ThreadLocal<RefCell<SpanStack>>,

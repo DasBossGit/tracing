@@ -31,7 +31,7 @@ use crate::{filter::FilterId, registry::Registry};
 /// [`LookupSpan`]: crate::registry::LookupSpan
 #[derive(Debug)]
 pub struct Context<'a, S> {
-    subscriber: Option<&'a S>,
+    pub subscriber: Option<&'a S>,
     /// The bitmask of all [`Filtered`] layers that currently apply in this
     /// context. If there is only a single [`Filtered`] wrapping the layer that
     /// produced this context, then this is that filter's ID. Otherwise, if we
@@ -43,7 +43,7 @@ pub struct Context<'a, S> {
     /// [`FilterId`]: crate::filter::FilterId
     /// [`and`]: crate::filter::FilterId::and
     #[cfg(all(feature = "registry", feature = "std"))]
-    filter: FilterId,
+    pub filter: FilterId,
 }
 
 // === impl Context ===
