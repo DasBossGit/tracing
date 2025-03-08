@@ -86,6 +86,21 @@ pub struct Metadata<'a> {
     kind: Kind,
 }
 
+impl<'a> Metadata<'a> {
+    pub fn clone_from_ref(r#ref: &Metadata<'a>) -> Metadata<'a> {
+        Self {
+            name: r#ref.name,
+            target: r#ref.target,
+            level: r#ref.level.clone(),
+            module_path: r#ref.module_path.clone(),
+            file: r#ref.file.clone(),
+            line: r#ref.line.clone(),
+            fields: r#ref.fields.clone(),
+            kind: r#ref.kind.clone(),
+        }
+    }
+}
+
 /// Indicates whether the callsite is a span or event.
 #[derive(Clone, Eq, PartialEq)]
 pub struct Kind(u8);
