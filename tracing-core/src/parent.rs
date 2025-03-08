@@ -1,7 +1,7 @@
 use crate::span::Id;
 
-#[derive(Debug)]
-pub(crate) enum Parent {
+#[derive(Debug, Clone)]
+pub enum Parent {
     /// The new span will be a root span.
     Root,
     /// The new span will be rooted in the current span.

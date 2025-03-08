@@ -287,6 +287,7 @@ pub mod subscriber;
 
 #[doc(inline)]
 pub use self::{
+    parent::Parent,
     callsite::Callsite,
     dispatcher::Dispatch,
     event::Event,
