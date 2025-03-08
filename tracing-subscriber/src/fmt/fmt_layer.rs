@@ -67,13 +67,13 @@ pub struct Layer<
     E = format::Format<format::Full>,
     W = fn() -> io::Stdout,
 > {
-    make_writer: W,
-    fmt_fields: N,
-    fmt_event: E,
-    fmt_span: format::FmtSpanConfig,
-    is_ansi: bool,
-    log_internal_errors: bool,
-    _inner: PhantomData<fn(S)>,
+    pub make_writer: W,
+    pub fmt_fields: N,
+    pub fmt_event: E,
+    pub fmt_span: format::FmtSpanConfig,
+    pub is_ansi: bool,
+    pub log_internal_errors: bool,
+    pub _inner: PhantomData<fn(S)>,
 }
 
 impl<S> Layer<S> {
@@ -81,6 +81,9 @@ impl<S> Layer<S> {
     pub fn new() -> Self {
         Self::default()
     }
+}
+
+impl<S, N, E, W> Layer<S, N, E, W> {
     pub fn inner(&self) -> PhantomData<fn(S)> {
         self._inner
     }
