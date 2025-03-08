@@ -87,16 +87,16 @@ pub struct Metadata<'a> {
 }
 
 impl<'a> Metadata<'a> {
-    pub fn clone_from_ref(r#ref: &Metadata<'a>) -> Metadata<'a> {
+    pub fn clone_from_ref(&self) -> Metadata<'a> {
         Self {
-            name: r#ref.name,
-            target: r#ref.target,
-            level: r#ref.level.clone(),
-            module_path: r#ref.module_path.clone(),
-            file: r#ref.file.clone(),
-            line: r#ref.line.clone(),
-            fields: r#ref.fields.clone(),
-            kind: r#ref.kind.clone(),
+            name: self.name,
+            target: self.target,
+            level: self.level.clone(),
+            module_path: self.module_path.clone(),
+            file: self.file.clone(),
+            line: self.line.clone(),
+            fields: self.fields.clone(),
+            kind: self.kind.clone(),
         }
     }
 }
