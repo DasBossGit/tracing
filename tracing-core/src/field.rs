@@ -137,6 +137,19 @@ pub struct Field {
     fields: FieldSet,
 }
 
+trait CloneField {
+    fn clone_from_ref(&self) -> Field;
+}
+
+impl CloneField for &Field {
+    fn clone_from_ref(&self) -> Field {
+        Field {
+            i: self.i,
+            fields: self.fields.clone_from_ref(),
+        }
+    }
+}
+
 /// An empty field.
 ///
 /// This can be used to indicate that the value of a field is not currently
@@ -157,12 +170,25 @@ pub struct Empty;
 ///
 /// [initialized]: Self::new
 /// [callsite identifiers]: callsite::Identifier
+
 #[derive(Clone)]
 pub struct FieldSet {
     /// The names of each field on the described span.
     names: &'static [&'static str],
     /// The callsite where the described span originates.
     callsite: callsite::Identifier,
+}
+trait CloneFieldSet {
+    fn clone_from_ref(&self) -> FieldSet;
+}
+
+impl CloneFieldSet for FieldSet {
+    fn clone_from_ref(&self) -> FieldSet {
+        FieldSet {
+            names: self.names.clone(),
+            callsite: self.callsite.clone(),
+        }
+    }
 }
 
 /// A set of fields and values for a span.
@@ -174,22 +200,20 @@ pub struct ValueSet<'a> {
 
 impl ValueSet<'_> {
     pub fn leak(&self) -> ValueSet<'static> {
-        let x = self
+        let values = self
             .values
             .iter()
-            .map(|(ref k, ref v)| {
-                let first: &'static Field = Box::leak(Box::new(**k));
-                let second: Option<&'static (dyn Value + 'static)> =
-                    v.map(|v: &dyn Value| Box::leak(Box::new(v)) as &'static (dyn Value + 'static));
-                (first, second)
+            .map(|(k, _)| {
+                let first: &'static Field = Box::leak(Box::new(k.clone_from_ref()));
+                (first, None)
             })
             .map(|(k, v)| (k, v))
             .collect::<Vec<(&'static Field, Option<&'static (dyn Value + 'static)>)>>();
-        let x: &'static [(&'static Field, Option<&mut &dyn Value>)] = Box::leak(Box::from_iter(x));
-        ValueSet {
-            values: x,
-            fields: Box::leak(Box::new(self.fields)),
-        }
+        let values: &'static [(&'static Field, Option<&'static (dyn Value + 'static)>)] =
+            Box::leak(Box::new(values));
+        let fields: &'static FieldSet = Box::leak(Box::new(self.fields.clone_from_ref()));
+        let x = ValueSet { values, fields };
+        x
     }
 }
 

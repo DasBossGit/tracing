@@ -37,8 +37,9 @@ impl<'a> Event<'a> {
     }
 
     pub fn leak(&self) -> Event<'static> {
+        let fields: &'static field::ValueSet<'static> = Box::leak(Box::new(self.fields.leak()));
         Event {
-            fields: self.fields.leak(),
+            fields: fields,
             metadata: self.metadata,
             parent: self.parent.clone(),
         }
