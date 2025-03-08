@@ -125,4 +125,7 @@ impl<'a> Event<'a> {
             _ => None,
         }
     }
+    pub fn parent_raw(&self) -> Parent {
+        self.parent.clone()
+    }
 }
