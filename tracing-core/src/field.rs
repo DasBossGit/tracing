@@ -109,6 +109,8 @@
 //! [`record`]: super::subscriber::Subscriber::record
 //! [`event`]:  super::subscriber::Subscriber::event
 //! [`Value::record`]: Value::record
+use ::core::iter::FromIterator;
+
 use crate::callsite;
 use crate::stdlib::{
     borrow::Borrow,
@@ -168,6 +170,27 @@ pub struct FieldSet {
 pub struct ValueSet<'a> {
     values: &'a [(&'a Field, Option<&'a (dyn Value + 'a)>)],
     fields: &'a FieldSet,
+}
+
+impl ValueSet<'_> {
+    pub fn leak(&self) -> ValueSet<'static> {
+        let x = self
+            .values
+            .iter()
+            .map(|(ref k, ref v)| {
+                let first: &'static Field = Box::leak(Box::new(**k));
+                let second: Option<&'static (dyn Value + 'static)> =
+                    v.map(|v: &dyn Value| Box::leak(Box::new(v)) as &'static (dyn Value + 'static));
+                (first, second)
+            })
+            .map(|(k, v)| (k, v))
+            .collect::<Vec<(&'static Field, Option<&'static (dyn Value + 'static)>)>>();
+        let x: &'static [(&'static Field, Option<&mut &dyn Value>)] = Box::leak(Box::from_iter(x));
+        ValueSet {
+            values: x,
+            fields: Box::leak(Box::new(self.fields)),
+        }
+    }
 }
 
 /// An iterator over a set of fields.

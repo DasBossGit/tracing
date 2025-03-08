@@ -38,7 +38,7 @@ impl<'a> Event<'a> {
 
     pub fn leak(&self) -> Event<'static> {
         Event {
-            fields: self.fields,
+            fields: self.fields.leak(),
             metadata: self.metadata,
             parent: self.parent.clone(),
         }
